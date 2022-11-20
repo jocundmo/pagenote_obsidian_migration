@@ -3,9 +3,13 @@ import json
 import os
 from urllib.parse import unquote, quote
 
+backup_file_path = "0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt"
+
 source_base_path = "E:/diskstation/03_Clips/"
 target_base_path = "E:/diskstation2/03_Clips/"
-with codecs.open("0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt", mode='r', encoding='utf-8') as f:
+
+
+with codecs.open(backup_file_path, mode='r', encoding='utf-8') as f:
     content = f.read()
     clean_content = unquote(content)
     print(clean_content)
@@ -21,7 +25,7 @@ for page_note in page_note_list:
         page_note["url"] = f"file:///{target_path}"
         page_note["urls"] = page_note["url"].split("file://")
 
-with codecs.open('test.txt', mode='w', encoding='utf-8') as f:
+with codecs.open("1" + backup_file_path, mode="w", encoding="utf-8") as f:
     output = json.dumps(page_note_main)
     f.write(quote(output))
 
