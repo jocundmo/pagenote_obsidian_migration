@@ -5,12 +5,10 @@ import re
 from urllib.parse import unquote, quote
 
 backup_file_path = "0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt"
-
-
 vault_index_path = "vault_index.txt"
-# source_base_path = "E:/diskstation/03_Clips/"  # 这个其实不用指定，只要把原路径中的头拿掉即可
-# target_base_path = "D:/03_Clips/"  # 这个应该从vault index中获取，依据是从原路径中得到的index
+
 invalid_htmls = list()
+
 
 def fregex(pattern, text, index=0):
     matcher = re.search(pattern, text, flags=re.IGNORECASE)
@@ -18,6 +16,7 @@ def fregex(pattern, text, index=0):
         return matcher.group(index)
     else:
         return ''
+
 
 with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
     vault_index = json.load(f)
