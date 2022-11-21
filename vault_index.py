@@ -1,6 +1,9 @@
+import codecs
+import json
 import os
 
 startDir = "E:/diskstation/03_Clips"
+indexPath = "vault_index.txt"
 
 htmls_count = 0
 all_count = 0
@@ -44,6 +47,13 @@ for dirpath, dirnames, filenames in os.walk(startDir):
 print(f"{all_count} files scanned, {htmls_count} are html files. {len(files_not_html)} are not html files.")
 print(f"{len(invalid_htmls)} html files are invalid, {len(duplicated_index)} html files are duplicated.")
 print(f"{len(vault_index)} totally indexed.")
+
+print(f"writing index to {indexPath}")
+# with open(indexPath, mode="w", encoding='utf-8') as f:
+#     json.dump(vault_index, f, ensure_ascii=False)
+with codecs.open(indexPath, mode="w", encoding="utf-8") as f:
+    json.dump(vault_index, f, ensure_ascii=False)
+print(f"vault index done")
 # print(f"{htmls_count} html files counted")
 # print(f"{all_count} all files counted")
 # print(f"{len(files_not_html)} files not html")
