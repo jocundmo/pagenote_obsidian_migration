@@ -5,7 +5,7 @@ startDir = "E:/diskstation/03_Clips"
 htmls_count = 0
 all_count = 0
 files_not_html = list()
-htmls_not_valid = list()
+invalid_htmls = list()
 duplicated_index = list()
 
 vault_index = dict()
@@ -26,9 +26,9 @@ for dirpath, dirnames, filenames in os.walk(startDir):
             if len(factors) != 2:
                 is_health = False
                 if len(factors) > 1 and factors[1].strip() == "":
-                    htmls_not_valid.append((filename, "索引号为空"))
+                    invalid_htmls.append((filename, "索引号为空"))
                 else:
-                    htmls_not_valid.append((filename, "超过或少于两个_"))
+                    invalid_htmls.append((filename, "超过或少于两个_"))
 
             # make index
             if is_health:
@@ -41,9 +41,12 @@ for dirpath, dirnames, filenames in os.walk(startDir):
         else:
             files_not_html.append(filename)
 
-print(f"{htmls_count} html files counted")
-print(f"{all_count} all files counted")
-print(f"{len(files_not_html)} files not html")
-print(files_not_html)
-print(f"{len(htmls_not_valid)} htmls not valid")
-print(htmls_not_valid)
+print(f"{all_count} files scanned, {htmls_count} are html files. {len(files_not_html)} are not html files.")
+print(f"{len(invalid_htmls)} html files are invalid, {len(duplicated_index)} html files are duplicated.")
+print(f"{len(vault_index)} totally indexed.")
+# print(f"{htmls_count} html files counted")
+# print(f"{all_count} all files counted")
+# print(f"{len(files_not_html)} files not html")
+# print(files_not_html)
+# print(f"{len(invalid_htmls)} htmls not valid")
+# print(invalid_htmls)
