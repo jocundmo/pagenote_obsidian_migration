@@ -5,10 +5,13 @@ from urllib.parse import unquote, quote
 
 backup_file_path = "0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt"
 
-source_base_path = "E:/diskstation/03_Clips/"  # 这个其实不用指定，只要把原路径中的头拿掉即可
-target_base_path = "D:/03_Clips/"  # 这个应该从vault index中获取，依据是从原路径中得到的index
 
+vault_index_path = "vault_index.txt"
+# source_base_path = "E:/diskstation/03_Clips/"  # 这个其实不用指定，只要把原路径中的头拿掉即可
+# target_base_path = "D:/03_Clips/"  # 这个应该从vault index中获取，依据是从原路径中得到的index
 
+with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
+    vault_index = json.load(f)
 
 with codecs.open(backup_file_path, mode='r', encoding='utf-8') as f:
     content = f.read()
@@ -19,11 +22,22 @@ with codecs.open(backup_file_path, mode='r', encoding='utf-8') as f:
 
 for page_note in page_note_list:
     if page_note["pageType"] == "file":  # or "http"
-        decoded_relative_path = page_note["path"].replace(f"/{source_base_path}", "")
-        target_path = os.path.join(target_base_path, decoded_relative_path)
-        page_note["key"] = f"file:///{target_path}"
-        page_note["path"] = f"/{target_path}"
-        page_note["url"] = f"file:///{target_path}"
+        # TODO: missing valid check.
+        # encoded_relative_path = page_note["path"].replace(f"/{source_base_path}", "")
+        file_title, file_index = page_note["path"].split("/")[-1].split("_")
+        file_index = file_index.rstrip(".html")
+        # decoded_relative_path = unquote(encoded_relative_path)
+        # TODO: could support entire vault relocation, thus assign a new base path is enough.
+        if file_index not in vault_index:
+            continue
+        target_path = vault_index[file_index]
+        target_path = target_path.lstrip("D:")  #
+        encoded_target_path = quote(target_path)
+        encoded_target_path = "D:" + encoded_target_path
+        # target_path = os.path.join(target_base_path, encoded_relative_path)
+        page_note["key"] = f"file:///{encoded_target_path}"
+        page_note["path"] = f"/{encoded_target_path}"
+        page_note["url"] = f"file:///{encoded_target_path}"
         page_note["urls"] = page_note["url"].split("file://")
 
 with codecs.open("modified_" + backup_file_path, mode="w", encoding="utf-8") as f:

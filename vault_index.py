@@ -2,7 +2,7 @@ import codecs
 import json
 import os
 
-startDir = "E:/diskstation/03_Clips"
+startDir = "D:/Clips_migration_testing"
 indexPath = "vault_index.txt"
 
 htmls_count = 0
