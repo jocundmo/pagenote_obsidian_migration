@@ -36,7 +36,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
             # make index
             if is_health:
                 html_title = factors[0]
-                html_index = factors[1]
+                html_index = factors[1].rstrip(".html")
                 if html_index in vault_index:
                     duplicated_index.append(filename)
                 else:
