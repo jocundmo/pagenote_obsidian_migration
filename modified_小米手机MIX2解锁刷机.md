@@ -19,4 +19,4 @@ tags: [刷机, xiaomi]
 * 最终一定要等到刷机结果显示“success”，即使手机开机了也不要去操作
 
 最后结果可参考此贴
-[本地知识库](file:///D:/Clips_migration_testing/百科/数码/小米手机解锁及线刷教程_167d24a570d126e5b5182c7f805dda7d54e814e1.html)
+[本地知识库](file:///D:/Clips_migration_testing/百科/数码/小米手机%20解锁及线刷教程_167d24a570d126e5b5182c7f805dda7d54e814e1.html)
