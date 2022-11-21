@@ -25,13 +25,17 @@ for dirpath, dirnames, filenames in os.walk(startDir):
             factors = filename.split("_")
 
             # health check
-            is_health = True
-            if len(factors) != 2:
-                is_health = False
-                if len(factors) > 1 and factors[1].strip() == "":
-                    invalid_htmls.append((filename, "索引号为空"))
-                else:
-                    invalid_htmls.append((filename, "超过或少于两个_"))
+            from health_check import valid_check
+            is_health, reason = valid_check(filename)
+            if not is_health:
+                invalid_htmls.append((filename, reason))
+            # is_health = True
+            # if len(factors) != 2:
+            #     is_health = False
+            #     if len(factors) > 1 and factors[1].strip() == "":
+            #         invalid_htmls.append((filename, "索引号为空"))
+            #     else:
+            #         invalid_htmls.append((filename, "超过或少于两个_"))
 
             # make index
             if is_health:
