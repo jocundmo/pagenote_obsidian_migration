@@ -49,7 +49,7 @@ with codecs.open(note_path, mode='r', encoding='utf-8') as f:
         target_path = vault_index[index]
         dir = "/".join(target_path.split("/")[0:-1])
         filename = target_path.split("/")[-1]
-        encoded_filename = encode_min(filename)  # TODO: 这里最好优化成只encode敏感字符，不处理中文
+        encoded_filename = encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
         encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
         target_link = f"[本地知识库](file:///{encoded_target_path})"
         content = content.replace(link[0], target_link)
