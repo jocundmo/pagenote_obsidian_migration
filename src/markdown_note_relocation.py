@@ -38,7 +38,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
 
                 write_to_disk = False
                 for link in vault_links:
-                    index = link[1].split("_")[-1].rstrip(".html")
+                    index = link[1].rsplit("_", maxsplit=1)[-1].rstrip(".html")
                     source_link = link[0].replace("\\", "/")
                     if index not in vault_index:
                         print(f"note link not existed in knowledge base index... {note_path}, {source_link}")

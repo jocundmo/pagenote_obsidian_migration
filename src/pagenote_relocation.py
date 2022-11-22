@@ -38,7 +38,7 @@ for page_note in page_note_list:
         if not is_health:
             invalid_htmls.append((decoded_filename, reason))
             continue
-        file_title, file_index = page_note["path"].split("/")[-1].split("_")
+        file_title, file_index = page_note["path"].split("/")[-1].rsplit("_", maxsplit=1)
         file_index = file_index.rstrip(".html")
         # TODO: could support entire vault relocation, thus assign a new base path is enough.
         if file_index not in vault_index:  # 若pagenote中的标注所指的原文章在vault中不存在

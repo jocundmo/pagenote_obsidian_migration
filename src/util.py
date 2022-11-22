@@ -2,7 +2,7 @@ import re
 
 
 def valid_check(filename):
-    factors = filename.split("_")
+    factors = filename.rsplit("_", maxsplit=1)
 
     if len(factors) != 2:
         if len(factors) > 1 and factors[1].strip() == "":
