@@ -1,7 +1,7 @@
 import codecs
 import json
 import os
-import re
+from src import util
 from urllib.parse import unquote, quote
 
 vault_index_path = "vault_index.txt"
@@ -22,28 +22,6 @@ do_real_replace = False
 # print("done")
 
 
-def encode_min(url):
-    return url.replace(" ", "%20").replace(":", "%3A").replace("/", "%2F").replace("?", "%3F")\
-        .replace("#", "%23").replace("[", "%5B").replace("]", "%5D").replace("@", "%40")\
-        .replace("!", "%21").replace("$", "%24").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29")\
-        .replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace(";", "%3B").replace("?", "%3F")
-
-
-def fregex(pattern, text, index):
-    pattern = re.compile(pattern, flags=re.IGNORECASE)
-    res = pattern.search(text)
-    lst = []
-    while res:
-        start, end = res.span()
-        if isinstance(index, list):
-            lst.append([res.group(i) for i in index])
-        else:
-            lst.append(res.group(index))
-        res = pattern.search(text, start + 1)
-
-    return lst
-
-
 with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
     vault_index = json.load(f)
 
@@ -56,7 +34,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
             # note_path = "小米手机MIX2解锁刷机.md"
             with codecs.open(note_path, mode='r', encoding='utf-8') as f:
                 content = f.read()
-                vault_links = fregex(r"\[本地知识库\]\((file:///)?(.*\.html)\)", content, [0, 2])
+                vault_links = util.fregex(r"\[本地知识库\]\((file:///)?(.*\.html)\)", content, [0, 2])
 
                 write_to_disk = False
                 for link in vault_links:
@@ -68,7 +46,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     target_path = vault_index[index]
                     dir = "/".join(target_path.split("/")[0:-1])
                     filename = target_path.split("/")[-1]
-                    encoded_filename = encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
+                    encoded_filename = util.encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
                     encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
                     target_link = f"[本地知识库](file:///{encoded_target_path})"
                     if source_link.strip() == target_link.strip():

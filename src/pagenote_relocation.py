@@ -1,7 +1,8 @@
 import codecs
 import json
-import os
 import re
+
+from src import util
 from urllib.parse import unquote, quote
 
 backup_file_path = "0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt"
@@ -31,10 +32,9 @@ with codecs.open(backup_file_path, mode='r', encoding='utf-8') as f:
 for page_note in page_note_list:
     if page_note["pageType"] == "file":  # or "http"
         # health check
-        from health_check import valid_check
         decoded_path = unquote(page_note["path"])
         decoded_filename = decoded_path.split("/")[-1]
-        is_health, reason = valid_check(decoded_filename)
+        is_health, reason = util.valid_check(decoded_filename)
         if not is_health:
             invalid_htmls.append((decoded_filename, reason))
             continue
