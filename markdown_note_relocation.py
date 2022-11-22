@@ -21,10 +21,11 @@ do_real_replace = False
 # url2 = base_url + urlencode(params2)
 # print("done")
 
+
 def encode_min(url):
     return url.replace(" ", "%20").replace(":", "%3A").replace("/", "%2F").replace("?", "%3F")\
         .replace("#", "%23").replace("[", "%5B").replace("]", "%5D").replace("@", "%40")\
-        .replace("!", "%21").replace("$", "%24").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace("(", "%29")\
+        .replace("!", "%21").replace("$", "%24").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29")\
         .replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace(";", "%3B").replace("?", "%3F")
 
 
@@ -70,7 +71,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     encoded_filename = encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
                     encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
                     target_link = f"[本地知识库](file:///{encoded_target_path})"
-                    if source_link == target_link:
+                    if source_link.strip() == target_link.strip():
                         print(f"note link is idential... {note_path}, {source_link}")
                         continue
 
