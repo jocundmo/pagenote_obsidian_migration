@@ -5,7 +5,8 @@ import re
 from urllib.parse import unquote, quote
 
 vault_index_path = "vault_index.txt"
-startDir = "E:/ObsidianVault/Personal_testing"
+startDir = "E:/ObsidianVault/Personal"
+# startDir = "E:/ObsidianVault/Personal_testing"
 
 ignored_folders = [".git", ".obsidian", ".trash"]
 turn_on_backup = True
@@ -56,11 +57,12 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                 content = f.read()
                 vault_links = fregex(r"\[本地知识库\]\((file:///)?(.*\.html)\)", content, [0, 2])
 
-                modified = False
+                write_to_disk = False
                 for link in vault_links:
                     index = link[1].split("_")[-1].rstrip(".html")
+                    source_link = link[0].replace("\\", "/")
                     if index not in vault_index:
-                        print(f"note link not existed in knowledge base index... {note_path}, {link}")
+                        print(f"note link not existed in knowledge base index... {note_path}, {source_link}")
                         continue
                     target_path = vault_index[index]
                     dir = "/".join(target_path.split("/")[0:-1])
@@ -68,14 +70,18 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     encoded_filename = encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
                     encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
                     target_link = f"[本地知识库](file:///{encoded_target_path})"
-                    if do_real_replace:
-                        content = content.replace(link[0], target_link)
-                        print(f"replacing note {note_path}...")
-                    else:
-                        print(f"{link[0]} -> {target_link}")
-                    modified = True
+                    if source_link == target_link:
+                        print(f"note link is idential... {note_path}, {source_link}")
+                        continue
 
-                if modified:
+                    if do_real_replace:
+                        content = content.replace(source_link, target_link)
+                        print(f"replacing note {note_path}... {source_link} -> {target_link}")
+                    else:
+                        print(f"replacing note {note_path}... {source_link} -> {target_link}")
+                    write_to_disk = True
+
+                if write_to_disk:
                     dir_name = os.path.dirname(note_path)
                     f_name = note_path[len(dir_name)+1:]
                     f_name_no_ext = f_name.rsplit(".")[0]
