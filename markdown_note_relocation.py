@@ -8,6 +8,8 @@ vault_index_path = "vault_index.txt"
 startDir = "E:/ObsidianVault/Personal_testing"
 
 ignored_folders = [".git", ".obsidian", ".trash"]
+turn_on_backup = True
+do_real_replace = False
 # from urllib.parse import urlencode
 # params2 = {
 #     'name': "王二",
@@ -66,17 +68,22 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     encoded_filename = encode_min(filename)  # 这里已优化成只encode敏感字符，不处理中文
                     encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
                     target_link = f"[本地知识库](file:///{encoded_target_path})"
-                    content = content.replace(link[0], target_link)
-                    print(f"replacing note {note_path}...")
+                    if do_real_replace:
+                        content = content.replace(link[0], target_link)
+                        print(f"replacing note {note_path}...")
+                    else:
+                        print(f"{link[0]} -> {target_link}")
                     modified = True
+
                 if modified:
                     dir_name = os.path.dirname(note_path)
                     f_name = note_path[len(dir_name)+1:]
                     f_name_no_ext = f_name.rsplit(".")[0]
                     ext_name = f_name.rsplit(".")[1] if len(f_name.rsplit(".")) >= 2 else None
-
-                    f_name_no_ext += "2"
+                    if turn_on_backup:
+                        f_name_no_ext += "_modified"
                     file_path_to_write = os.path.join(dir_name, f"{f_name_no_ext}.{ext_name}").replace("\\", "/")
-                    with codecs.open(file_path_to_write, mode="w", encoding="utf-8") as f:
-                        # output = json.dumps(content, ensure_ascii=False)
-                        f.write(content)
+                    if do_real_replace:
+                        with codecs.open(file_path_to_write, mode="w", encoding="utf-8") as f:
+                            # output = json.dumps(content, ensure_ascii=False)
+                            f.write(content)
