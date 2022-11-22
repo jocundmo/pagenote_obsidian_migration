@@ -23,13 +23,17 @@ def encode_min(url):
         .replace("!", "%21").replace("$", "%24").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace("(", "%29")\
         .replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace(";", "%3B").replace("?", "%3F")
 
-def fregex(pattern, text, index=0):
+
+def fregex(pattern, text, index):
     pattern = re.compile(pattern, flags=re.IGNORECASE)
     res = pattern.search(text)
     lst = []
     while res:
         start, end = res.span()
-        lst.append(res.group(index))
+        if isinstance(index, list):
+            lst.append([res.group(i) for i in index])
+        else:
+            lst.append(res.group(index))
         res = pattern.search(text, start + 1)
 
     return lst
@@ -41,10 +45,10 @@ with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
 note_path = "小米手机MIX2解锁刷机.md"
 with codecs.open(note_path, mode='r', encoding='utf-8') as f:
     content = f.read()
-    vault_links = fregex(r"\[本地知识库\]\(file:///(.*\.html)\)", content, 0)
-    vault_path = fregex(r"\[本地知识库\]\(file:///(.*\.html)\)", content, 1)
-    vault_links_zipped = list(zip(vault_links, vault_path))
-    for link in vault_links_zipped:
+    vault_links = fregex(r"\[本地知识库\]\(file:///(.*\.html)\)", content, [0, 1])
+    # vault_path = fregex(r"\[本地知识库\]\(file:///(.*\.html)\)", content, 1)
+    # vault_links_zipped = list(zip(vault_links, vault_path))
+    for link in vault_links:
         index = link[1].split("_")[-1].rstrip(".html")
         target_path = vault_index[index]
         dir = "/".join(target_path.split("/")[0:-1])
