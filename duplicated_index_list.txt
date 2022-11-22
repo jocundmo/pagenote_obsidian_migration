@@ -1,12 +1,4 @@
 [
-  "为什么多元函数全微分等于偏微分之和？_7839c265d46b65e5f27607523a85cbde44a1bbc9.html",
-  "微分和导数的关系是什么？两者的几何意义有什么不同？为什么要定义微分？_12fd33c7d22d8579d76096e6e146b2fcda65e325.html",
-  "格林公式史上最通俗最透彻讲解_f6cee17771f9f76d6e4ffef791397016a936a191.html",
-  "罗尔定理_cb1693d09af5cbdd0a4ed8075e6904226fc73b0e.html",
-  "「泛函」究竟是什么意思？_9a827a35cb171e139f76d147021240b8bdf67f63.html",
-  "pytorch中torch.optim.SGD的step()怎么实现随机取样本计算梯度以减少运算量？_220c8f2f3ccfad7514087a789cafda79f56afff2.html",
-  "深入浅出--梯度下降法及其实现_ce2a0ac3e46875b729456fa2f43a3c0418a3961c.html",
-  "特征值和特征向量_6847c82c32a636dde7651e84e33099b15870413b.html",
   "线性代数应该这样讲(四)-奇异值分解与主成分分析_fcbe2e8f8a8e31fa4bf934fbce122bba47be05a8.html",
   "为什么启用AHCI还要分装系统前和装系统后？_870bcf0bf374f384a633d942fa6ff9cfb84e73b0.html",
   "面向对象中的继承真的几乎“一无是处”吗？_a2f023f5710f2cb2345c60d283cc6cc7ac2645af.html",
