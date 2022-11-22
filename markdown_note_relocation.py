@@ -52,12 +52,13 @@ for dirpath, dirnames, filenames in os.walk(startDir):
             # note_path = "小米手机MIX2解锁刷机.md"
             with codecs.open(note_path, mode='r', encoding='utf-8') as f:
                 content = f.read()
-                vault_links = fregex(r"\[本地知识库\]\(file:///(.*\.html)\)", content, [0, 1])
+                vault_links = fregex(r"\[本地知识库\]\((file:///)?(.*\.html)\)", content, [0, 2])
 
                 modified = False
                 for link in vault_links:
                     index = link[1].split("_")[-1].rstrip(".html")
                     if index not in vault_index:
+                        print(f"note link not existed in knowledge base index... {note_path}, {link}")
                         continue
                     target_path = vault_index[index]
                     dir = "/".join(target_path.split("/")[0:-1])
@@ -66,6 +67,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     encoded_target_path = os.path.join(dir, encoded_filename).replace("\\", "/")
                     target_link = f"[本地知识库](file:///{encoded_target_path})"
                     content = content.replace(link[0], target_link)
+                    print(f"replacing note {note_path}...")
                     modified = True
                 if modified:
                     dir_name = os.path.dirname(note_path)
