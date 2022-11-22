@@ -63,8 +63,8 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                 if write_to_disk:
                     dir_name = os.path.dirname(note_path)
                     f_name = note_path[len(dir_name)+1:]
-                    f_name_no_ext = f_name.rsplit(".")[0]
-                    ext_name = f_name.rsplit(".")[1] if len(f_name.rsplit(".")) >= 2 else None
+                    f_name_no_ext = f_name.rsplit(".", maxsplit=1)[0]
+                    ext_name = f_name.rsplit(".", maxsplit=1)[1] if len(f_name.rsplit(".", maxsplit=1)) >= 2 else None
                     if turn_on_backup:
                         f_name_no_ext += "_modified"
                     file_path_to_write = os.path.join(dir_name, f"{f_name_no_ext}.{ext_name}").replace("\\", "/")
