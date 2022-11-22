@@ -8,8 +8,8 @@ from urllib.parse import unquote, quote
 
 vault_index_path = "../vault_index.txt"
 # backup_file_path = "../0.23.6_chrome_backup_2022-11-18-22-45_154.pagenote.txt"
-backup_file_path = "../2022-11-22_13_47_03.pagenote.bak"
-pagenote_ver = 23  # 23 or 24
+backup_file_path = "../2022-11-22_13_41_34_fixed.pagenote.bak"
+pagenote_ver = 24  # 23 or 24
 
 with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
     vault_index = json.load(f)
@@ -24,16 +24,28 @@ def walk_and_fixed_pagenotes(pagenote_path):
         page_note_main = json.loads(content)
         page_note_list = page_note_main["pages"]
 
+    # build "lights" index
+    light_index = dict()
+    for light in page_note_main["lights"]:
+        if light["pageKey"] in light_index:
+            light_index[light["pageKey"]].append(light)  # 这里的light应该是个列表
+        else:
+            light_index[light["pageKey"]] = [light]
+
     for page_note in page_note_list:
         if page_note["pageType"] == "http":  # or "http"
             # health check
-            decoded_path = unquote(page_note["path"])
-            decoded_filename = decoded_path.split("/")[-1]
+            pageKey_in_light = page_note["key"]  # backup the origin key before replace it with updated one
+            decoded_key = unquote(page_note["key"])
+            decoded_filename = decoded_key.split("/")[-1]
+
+            # decoded_path = unquote(page_note["path"])
+            # decoded_filename = decoded_path.split("/")[-1]
             is_health, reason = util.valid_check(decoded_filename)
             if not is_health:
                 invalid_htmls.append((decoded_filename, reason))
                 continue
-            file_title, file_index = page_note["path"].split("/")[-1].rsplit("_", maxsplit=1)
+            file_title, file_index = page_note["key"].split("/")[-1].rsplit("_", maxsplit=1)
             file_index = file_index.rstrip(".html")
             # TODO: could support entire vault relocation, thus assign a new base path is enough.
             if file_index not in vault_index:  # 若pagenote中的标注所指的原文章在vault中不存在
@@ -41,7 +53,7 @@ def walk_and_fixed_pagenotes(pagenote_path):
                 continue
             target_path = vault_index[file_index]
             driver = util.fregex(r"^[A-Z]:", target_path, 0)[0]
-            print(f"driver is {driver}...")
+            # print(f"driver is {driver}...")
             target_path = target_path.lstrip(driver)  # strip driver bcoz colon could be quoted
             encoded_target_path = quote(target_path)
             encoded_target_path = driver + encoded_target_path
@@ -50,6 +62,11 @@ def walk_and_fixed_pagenotes(pagenote_path):
             page_note["path"] = f"/{encoded_target_path}"
             page_note["url"] = f"file:///{encoded_target_path}"
             page_note["urls"] = page_note["url"].split("file://")
+
+            if pagenote_ver > 23:
+                for light in light_index[pageKey_in_light]:
+                    light["pageKey"] = f"file:///{encoded_target_path}"
+                    light["url"] = f"file:///{encoded_target_path}"
 
     print(f"{len(invalid_htmls)} html files are invalid")
 
