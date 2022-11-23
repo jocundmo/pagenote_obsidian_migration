@@ -4,24 +4,15 @@ import os
 from src import util
 from urllib.parse import unquote, quote
 
-vault_index_path = "vault_index.txt"
+vault_index_path = "../vault_index.txt"
 startDir = "E:/ObsidianVault/Personal"
 # startDir = "E:/ObsidianVault/Personal_testing"
 
 ignored_folders = [".git", ".obsidian", ".trash"]
 turn_on_backup = True
 do_real_replace = False
-# from urllib.parse import urlencode
-# params2 = {
-#     'name': "王二",
-#     'extra': "/",
-#     'special': '&',
-#     'equal': '='}
-# base_url = "file:///E:\diskstation\03_Clips\39综合收藏\小米手机 解锁及线刷教程_167d24a570d126e5b5182c7f805dda7d54e814e1.html"
-# url2 = base_url + urlencode(params2)
-# print("done")
 
-
+replaced_count = 0
 with codecs.open(vault_index_path, mode='r', encoding='utf-8') as f:
     vault_index = json.load(f)
 
@@ -61,6 +52,7 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                     write_to_disk = True
 
                 if write_to_disk:
+                    replaced_count += 1
                     dir_name = os.path.dirname(note_path)
                     f_name = note_path[len(dir_name)+1:]
                     f_name_no_ext = f_name.rsplit(".", maxsplit=1)[0]
@@ -72,3 +64,4 @@ for dirpath, dirnames, filenames in os.walk(startDir):
                         with codecs.open(file_path_to_write, mode="w", encoding="utf-8") as f:
                             # output = json.dumps(content, ensure_ascii=False)
                             f.write(content)
+print(f"{replaced_count} notes are replaced.")
