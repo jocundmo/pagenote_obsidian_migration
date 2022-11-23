@@ -55,7 +55,7 @@ def walk_and_fixed_pagenotes(pagenote_path):
             driver = util.fregex(r"^[A-Z]:", target_path, 0)[0]
             # print(f"driver is {driver}...")
             target_path = target_path.lstrip(driver)  # strip driver bcoz colon could be quoted
-            encoded_target_path = quote(target_path)
+            encoded_target_path = util.quote_safe(target_path)
             encoded_target_path = driver + encoded_target_path
             # target_path = os.path.join(target_base_path, encoded_relative_path)
             page_note["key"] = f"file:///{encoded_target_path}"

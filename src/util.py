@@ -1,4 +1,5 @@
 import re
+from urllib.parse import unquote, quote
 
 
 def valid_check(filename):
@@ -18,6 +19,10 @@ def encode_min(url):
         .replace("#", "%23").replace("[", "%5B").replace("]", "%5D").replace("@", "%40")\
         .replace("!", "%21").replace("$", "%24").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29")\
         .replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace(";", "%3B").replace("?", "%3F").replace('"', "%22")
+
+
+def quote_safe(url):
+    return quote(url).replace("%26", "&")
 
 
 def fregex(pattern, text, index):
