@@ -9,8 +9,8 @@ startDir = "E:/ObsidianVault/Personal"
 # startDir = "E:/ObsidianVault/Personal_testing"
 
 ignored_folders = [".git", ".obsidian", ".trash"]
-turn_on_backup = True
-do_real_replace = False
+turn_on_backup = False
+do_write_disk = True
 markdown_note_title = "本地知识库"
 
 
@@ -46,7 +46,7 @@ def walk_and_fixed_markdown_note(vault_path, index_path):
                             print(f"note link is idential... {note_path}, {source_link}")
                             continue
 
-                        if do_real_replace:
+                        if do_write_disk:
                             content = content.replace(source_link, target_link)
                             print(f"replacing note {note_path}... {source_link} -> {target_link}")
                         else:
@@ -62,7 +62,7 @@ def walk_and_fixed_markdown_note(vault_path, index_path):
                         if turn_on_backup:
                             f_name_no_ext += "_modified"
                         file_path_to_write = os.path.join(dir_name, f"{f_name_no_ext}.{ext_name}").replace("\\", "/")
-                        if do_real_replace:
+                        if do_write_disk:
                             with codecs.open(file_path_to_write, mode="w", encoding="utf-8") as f:
                                 # output = json.dumps(content, ensure_ascii=False)
                                 f.write(content)
