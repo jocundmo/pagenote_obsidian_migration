@@ -11,6 +11,7 @@ startDir = "E:/ObsidianVault/Personal"
 ignored_folders = [".git", ".obsidian", ".trash"]
 turn_on_backup = True
 do_real_replace = False
+markdown_note_title = "本地知识库"
 
 
 def walk_and_fixed_markdown_note(vault_path, index_path):
@@ -26,7 +27,7 @@ def walk_and_fixed_markdown_note(vault_path, index_path):
                 # note_path = "小米手机MIX2解锁刷机.md"
                 with codecs.open(note_path, mode='r', encoding='utf-8') as f:
                     content = f.read()
-                    vault_links = util.fregex(r"\[本地知识库\]\((file:///)?(.*\.html)\)", content, [0, 2])
+                    vault_links = util.fregex(rf"\[{markdown_note_title}\]\((file:///)?(.*\.html)\)", content, [0, 2])
 
                     write_to_disk = False
                     for link in vault_links:
